@@ -6,10 +6,22 @@
         <div>
             <h1>My Puzzles</h1>
             <a asp-controller="Picross" asp-action="MakePuzzle">+new puzzle</a>
+            <div>
+                @foreach(var puzzle in ViewBag.MyUser.CreatedPuzzles)
+                {
+                    <p>puzzle #@puzzle.PuzzleId</p>
+                }
+            </div>
         </div>
         
         <div>
             <h1>Community puzzles</h1>
+            <div>
+                @foreach(var puzzle in ViewBag.AllPuzzles)
+                {
+                    <a asp-action="ShowPuzzle" asp-controller="Picross" asp-route-puzzleId="@puzzle.PuzzleId">#@puzzle.PuzzleId dim:@puzzle.xSize x @puzzle.ySize</a>
+                }
+            </div>
         </div>
     </div>
 </div>
