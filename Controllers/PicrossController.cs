@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,9 +17,28 @@ namespace Picross.Controllers
             dbContext = context;
         }
 
+        [HttpGet ("picross/dashboard")]
         public IActionResult Dashboard ()
         {
+            User userInDb = LoggedIn ();
+            if (userInDb == null)
+            {
+                return RedirectToAction ("Logout", "Home");
+            }
             return View ();
+        }
+
+        [HttpGet ("picross/make")]
+        public IActionResult MakePuzzle ()
+        {
+            return View ();
+        }
+
+        [HttpPost("picross/create")]
+        public IActionResult CreatePuzzle(Puzzle puzzle)
+        {
+            Console.WriteLine(puzzle.puzzleData);
+            return RedirectToAction("Dashboard");
         }
 
         private User LoggedIn ()

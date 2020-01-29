@@ -84,6 +84,13 @@ namespace Picross.Controllers
             return View ("Login");
         }
 
+        [HttpGet ("Logout")]
+        public IActionResult Logout ()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login");
+        }
+
         public IActionResult Privacy ()
         {
             return View ();
