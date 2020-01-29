@@ -10,13 +10,11 @@ namespace Picross.Models
         public int PuzzleId { get; set; }
 
         [Required]
-        [MinLength (5, ErrorMessage = "Puzzle must be at least 5x5")]
-        [MaxLength (40, ErrorMessage = "Puzzle cannot be larger than 40x40")]
+        [Range(5,40)]
         public int xSize { get; set; }
 
         [Required]
-        [MinLength (5, ErrorMessage = "Puzzle must be at least 5x5")]
-        [MaxLength (40, ErrorMessage = "Puzzle cannot be larger than 40x40")]
+        [Range(5,40)]
         public int ySize { get; set; }
 
         [Required]

@@ -1,0 +1,65 @@
+@model Puzzle
+<link rel="stylesheet" href="~/css/picross.css" />
+<link rel="stylesheet" href="~/css/puzzle.css" />
+
+<div id="wrapper">
+    <table id="puzzleGrid">
+        @for(int row=0; row < 5; ++row)
+        {
+            <tr>
+            @for(int col=0; col < 5; ++col)
+            {
+                <td id="r@(row)c@(col)" class="puzzleCell" x="@row" y="@col"></td>
+            }
+            </tr>
+        }
+    </table>
+
+    <form asp-action="CreatePuzzle" asp-controller="Picross" method="post">
+        <input id="puzzleData" type="hidden" asp-for="puzzleData">
+        <input type="hidden" asp-for="xSize" value="5">
+        <input type="hidden" asp-for="ySize" value="5">
+        <input type="hidden" asp-for="UserId" value="@ViewBag.UserId">
+        <input id="submitButton" type="submit" value="create">
+    </form>
+</div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script language="javascript" type="text/javascript">
+
+    $(document).ready(function(){
+        var xSize = 5;
+        var ySize = 5;
+        //create an empty grid
+        { 
+            let dataSet = "";
+            var gridLayout = new Array();
+            for(var i = 0; i < ySize; ++i){
+                gridLayout[i] = new Array();
+                for(var j = 0; j < xSize; ++j){
+                    gridLayout[i][j] = 0;
+                    dataSet += '0';
+                }
+            }
+            document.getElementById("puzzleData").value = dataSet;
+        }
+
+        //on click, change the style and change the grid layout for submitting
+        $(".puzzleCell").on('click', function(event){
+            if(gridLayout[$(this).attr("x")][$(this).attr("y")] == 1){
+                $(this).css("background-color", "white");
+                gridLayout[$(this).attr("x")][$(this).attr("y")] = 0;
+            }
+            else{
+                $(this).css("background-color", "red");
+                gridLayout[$(this).attr("x")][$(this).attr("y")] = 1;
+            }
+            //also set the form input to the data for the puzzle
+            let dataSet = "";
+            for(var i = 0; i < ySize; ++i){
+                dataSet += gridLayout[i].join('');
+            }
+            //console.log(dataSet);
+            document.getElementById("puzzleData").value = dataSet;
+        });
+    });
+</script>
