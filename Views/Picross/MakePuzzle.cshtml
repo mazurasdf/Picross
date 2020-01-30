@@ -4,10 +4,10 @@
 
 <div id="wrapper">
     <table id="puzzleGrid">
-        @for(int row=0; row < 5; ++row)
+        @for(int row=0; row < @ViewBag.ySize; ++row)
         {
             <tr>
-            @for(int col=0; col < 5; ++col)
+            @for(int col=0; col < ViewBag.xSize; ++col)
             {
                 <td id="r@(row)c@(col)" class="puzzleCell" x="@row" y="@col"></td>
             }
@@ -17,18 +17,25 @@
 
     <form asp-action="CreatePuzzle" asp-controller="Picross" method="post">
         <input id="puzzleData" type="hidden" asp-for="puzzleData">
-        <input type="hidden" asp-for="xSize" value="5">
-        <input type="hidden" asp-for="ySize" value="5">
+        <input type="hidden" asp-for="xSize" value="@ViewBag.xSize">
+        <input type="hidden" asp-for="ySize" value="@ViewBag.ySize">
         <input type="hidden" asp-for="UserId" value="@ViewBag.UserId">
         <input id="submitButton" type="submit" value="create">
+    </form>
+
+    <hr>
+    <form asp-action="SetDimensions" asp-controller="Picross" method="post">
+        <input type="number" name="xDim" placeholder="X">
+        <input type="number" name="yDim" placeholder="Y">
+        <input type="submit" value="Set dimensions">
     </form>
 </div>
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script language="javascript" type="text/javascript">
 
     $(document).ready(function(){
-        var xSize = 5;
-        var ySize = 5;
+        var xSize = @ViewBag.xSize;
+        var ySize = @ViewBag.ySize;
         //create an empty grid
         { 
             let dataSet = "";

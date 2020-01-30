@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Picross.Contexts;
 using Picross.Models;
@@ -41,7 +42,18 @@ namespace Picross.Controllers
                 return RedirectToAction ("Logout", "Home");
             }
             ViewBag.UserId = userInDb.UserId;
+            ViewBag.xSize = xSize;
+            ViewBag.ySize = ySize;
             return View ();
+        }
+
+        [HttpPost("picross/make/set")]
+        public IActionResult SetDimensions(int xDim, int yDim)
+        {
+            return RedirectToAction("MakePuzzle", "Picross", new RouteValueDictionary{
+                {"xSize",xDim},
+                {"ySize",yDim}
+            });
         }
 
         [HttpPost ("picross/create")]
