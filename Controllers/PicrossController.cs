@@ -75,8 +75,8 @@ namespace Picross.Controllers
                 return RedirectToAction ("Logout", "Home");
             }
             ViewBag.User = userInDb;
-            ViewBag.Puzzle = dbContext.Puzzles.FirstOrDefault(p => p.PuzzleId == puzzleId);
-            return View();
+            Puzzle currentPuzzle = dbContext.Puzzles.FirstOrDefault(p => p.PuzzleId == puzzleId);
+            return View("ShowPuzzle", currentPuzzle);
         }
 
         private User LoggedIn ()

@@ -1,4 +1,142 @@
+@model Puzzle
+
 <link rel="stylesheet" href="~/css/picross.css" />
 <link rel="stylesheet" href="~/css/puzzle.css" />
 
-it me, showpuzzle
+<div id="wrapper">
+    <table id="puzzleGrid">
+         <tr>
+            <td></td>
+        @for(int col = 1; col <= @Model.xSize; ++col)
+        {
+            <td>
+                <ul id="r0c@(col)"></ul>
+            </td>
+        }
+        </tr>
+        @for(int row=0; row < @Model.ySize; ++row)
+        {
+            <tr>
+                @for(int col = 0; col <= @Model.xSize; ++col)
+                {
+                    @if(col == 0)
+                    {
+                        <td id="r@(row)c0">
+                            <ul></ul>
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="puzzleCell" x="@row" y="@col"></td>
+                    }
+                }
+            </tr>
+        }
+    </table>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script language="javascript" type="text/javascript">
+     $(document).ready(function(){
+         function fillHints(xSize, ySize, dataSet){
+             //find the hint numbers for the top
+             for(let x = 0; x < xSize; ++x){
+                //count will count a horizontal grouping of filled cells
+                let count = 0;
+                for(let y = 0; y < ySize; ++y){
+                    //if a cell is filled, add to count
+                    if (dataSet[(xSize * y) + x] == '1'){
+                         ++count;
+                         //if last element in a column, add grouping to list
+                         if(y == ySize - 1){
+                             var ul = document.getElementById("r0c" + (x+1));
+                             var li = document.createElement("li");
+                             li.appendChild(document.createTextNode(count));
+                             ul.appendChild(li);
+                         }
+                     }
+                     //if an empty cell if reached, we add that grouping to list
+                     else if(count > 0){
+                        //reset count and add to list
+                        var ul = document.getElementById("r0c" + (x+1));
+                        var li = document.createElement("li");
+                        li.appendChild(document.createTextNode(count));
+                        ul.appendChild(li);
+
+                        count = 0;
+                     }
+                 }
+             }
+             //find hint numbers from the side
+            for(let y = 0; y < ySize; ++y){
+                //count will count a horizontal grouping of filled cells
+                let count = 0;
+                for(let x = 0; x < xSize; ++x){
+                    //if a cell is filled, add to count
+                    if (dataSet[(xSize * y) + x] == '1'){
+                        ++count;
+                        //if last element in a column, add grouping to list
+                        if(x == xSize - 1){
+                            var ul = document.getElementById("r" + (y) + "c0");
+                            var li = document.createElement("li");
+                            li.appendChild(document.createTextNode(count));
+                            ul.appendChild(li);
+                        }
+                    }
+                    //if an empty cell if reached, we add that grouping to list
+                    else if(count > 0){
+                        //reset count and add to list
+                        var ul = document.getElementById("r" + (y) + "c0");
+                        var li = document.createElement("li");
+                        li.appendChild(document.createTextNode(count));
+                        ul.appendChild(li);
+                        count = 0;
+                    }
+                }
+            }
+         }
+        //create an empty grid
+        var gridLayout = new Array();
+        for(var i = 0; i < @Model.ySize; ++i){
+            gridLayout[i] = new Array();
+            for(var j = 0; j < @Model.xSize; ++j){
+                gridLayout[i][j] = 0;
+            }
+        }
+
+        var trueGridLayout = new Array();
+        var puzzleString = @Model.puzzleData;
+        for(var i = 0; i < @Model.ySize; ++i){
+            trueGridLayout[i] = new Array();
+            for(var j = 0; j < @Model.xSize; ++j){
+                trueGridLayout[i][j] = parseInt(puzzleString[(@Model.xSize * i) + j], 10);
+            }
+        }
+        //TODO you can see by this output that the data is not being put in properly. figure that out and
+        //verify the win state. after that, you're golden, baby! just work on QOL and design stuff to look nice
+        console.log(trueGridLayout);
+         //on click, change the style and change the grid layout for submitting
+        $(".puzzleCell").on('click', function(event){
+            if(gridLayout[$(this).attr("x")][$(this).attr("y")] == 1){
+                $(this).css("background-color", "white");
+                gridLayout[$(this).attr("x")][$(this).attr("y")] = 0;
+                if(gridLayout == trueGridLayout){
+                    console.log("you win");
+                }
+            }
+            else{
+                $(this).css("background-color", "red");
+                gridLayout[$(this).attr("x")][$(this).attr("y")] = 1;
+                if(gridLayout == trueGridLayout){
+                    console.log("you win");
+                }
+            }
+        });
+
+        console.log("start to fill hints");
+        console.log("x:@Model.xSize y:@Model.ySize")
+        console.log("puzzle data: " + "@Model.puzzleData");
+        fillHints(@Model.xSize, @Model.ySize, "@Model.puzzleData");
+        console.log("done filling hints");
+     });
+</script>

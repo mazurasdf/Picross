@@ -20,6 +20,7 @@
                 @foreach(var puzzle in ViewBag.AllPuzzles)
                 {
                     <a asp-action="ShowPuzzle" asp-controller="Picross" asp-route-puzzleId="@puzzle.PuzzleId">#@puzzle.PuzzleId dim:@puzzle.xSize x @puzzle.ySize</a>
+                    <br>
                 }
             </div>
         </div>
