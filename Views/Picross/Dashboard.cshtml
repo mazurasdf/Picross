@@ -5,7 +5,7 @@
         <a asp-controller="Home" asp-action="Logout">Logout</a>
         <div>
             <h1>My Puzzles</h1>
-            <a asp-controller="Picross" asp-action="MakePuzzle">+new puzzle</a>
+            <a asp-controller="Picross" asp-action="MakePuzzle" asp-route-xSize="5" asp-route-ySize="5">+new puzzle</a>
             <div>
                 @foreach(var puzzle in ViewBag.MyUser.CreatedPuzzles)
                 {
@@ -20,6 +20,7 @@
                 @foreach(var puzzle in ViewBag.AllPuzzles)
                 {
                     <a asp-action="ShowPuzzle" asp-controller="Picross" asp-route-puzzleId="@puzzle.PuzzleId">#@puzzle.PuzzleId dim:@puzzle.xSize x @puzzle.ySize</a>
+                    <br>
                 }
             </div>
         </div>
