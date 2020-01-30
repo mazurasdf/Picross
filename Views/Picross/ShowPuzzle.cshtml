@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="~/css/picross.css" />
 <link rel="stylesheet" href="~/css/puzzle.css" />
 
-<div id="wrapper">
+<div id="wrapper" oncontextmenu="return false">
     <table id="puzzleGrid">
          <tr>
             <td></td>
@@ -103,35 +103,55 @@
                 gridLayout[i][j] = 0;
             }
         }
-
         var trueGridLayout = new Array();
-        var puzzleString = @Model.puzzleData;
+        var puzzleString = "@Model.puzzleData";
         for(var i = 0; i < @Model.ySize; ++i){
             trueGridLayout[i] = new Array();
             for(var j = 0; j < @Model.xSize; ++j){
                 trueGridLayout[i][j] = parseInt(puzzleString[(@Model.xSize * i) + j], 10);
             }
         }
-        //TODO you can see by this output that the data is not being put in properly. figure that out and
-        //verify the win state. after that, you're golden, baby! just work on QOL and design stuff to look nice
-        console.log(trueGridLayout);
-         //on click, change the style and change the grid layout for submitting
-        $(".puzzleCell").on('click', function(event){
-            if(gridLayout[$(this).attr("x")][$(this).attr("y")] == 1){
-                $(this).css("background-color", "white");
-                gridLayout[$(this).attr("x")][$(this).attr("y")] = 0;
-                if(gridLayout == trueGridLayout){
-                    console.log("you win");
+        
+
+        $(".puzzleCell").mousedown(function(ev){
+            var cellX = $(this).attr("x");
+            var cellY = $(this).attr("y");
+
+            
+            //left click
+            if(ev.which == 1){
+                if(gridLayout[cellX][cellY - 1] == 1){
+                    $(this).css("background-color", "white");
+                    gridLayout[cellX][cellY - 1] = 0;
+                    if(isWin(trueGridLayout, gridLayout)){
+                        console.log("you win");
+                    }
+                }
+                else{
+                    $(this).css("background-color", "navy");
+                    gridLayout[cellX][cellY - 1] = 1;
+                    if(isWin(trueGridLayout, gridLayout)){
+                        console.log("you win");
+                    }
                 }
             }
+            //right or middle click
             else{
-                $(this).css("background-color", "red");
-                gridLayout[$(this).attr("x")][$(this).attr("y")] = 1;
-                if(gridLayout == trueGridLayout){
+                $(this).css("background-color", "lightgrey");
+                gridLayout[cellX][cellY - 1] = 0;
+                if(isWin(trueGridLayout, gridLayout)){
                     console.log("you win");
                 }
             }
         });
+
+        function isWin(answerArr, playerArr){
+            for(let i = 0; i < answerArr.length; ++i)
+                for(let j = 0; j < answerArr[i].length; ++j)
+                    if(answerArr[i][j] != playerArr[i][j])
+                        return false;
+            return true;
+        }
 
         console.log("start to fill hints");
         console.log("x:@Model.xSize y:@Model.ySize")

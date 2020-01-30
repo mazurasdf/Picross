@@ -32,8 +32,8 @@ namespace Picross.Controllers
             return View ();
         }
 
-        [HttpGet ("picross/make")]
-        public IActionResult MakePuzzle ()
+        [HttpGet ("picross/make/xSize/ySize")]
+        public IActionResult MakePuzzle (int xSize, int ySize)
         {
             User userInDb = LoggedIn ();
             if (userInDb == null)
