@@ -54,3 +54,53 @@ body {
   height: 60px;
   line-height: 60px; /* Vertically center the text there */
 }
+
+#wrapper{
+  background-color: rgb(170, 214, 236);
+  position: relative;
+  padding: 15px;
+}
+
+#container{
+  padding: 10px;
+}
+
+.puzzlesTab{
+  background-color: #e6e6e6;
+  border-radius: 10px;
+  padding: 6px;
+  margin: 5px;
+}
+
+.puzzleTabBox{
+  display: inline-block;
+  padding: 3%;
+  margin: 1%;
+  width: 17%;
+  background-color: rgba(0, 204, 0, 0.178);
+  border: 2px rgba(0, 204, 0, 0.384);
+}
+
+.puzzleTabBox:hover{
+  background-color: rgba(0, 204, 0, 0.384);
+}
+
+tr:hover{
+  background-color: rgba(93, 253, 0, 0.459);
+}
+
+td:hover{
+  background-color: rgba(93, 253, 0, 0.459);
+}
+
+td:hover::after,
+th:hover::after {
+  content: "";
+  position: absolute;
+  background-color: rgba(93, 253, 0, 0.459);
+  left: 0;
+  top: -5000px;
+  height: 10000px;
+  width: 100%;
+  z-index: -1;
+}

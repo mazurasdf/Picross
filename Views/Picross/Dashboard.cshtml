@@ -1,26 +1,34 @@
-<link rel="stylesheet" href="~/css/picross.css" />
-
 <div id="wrapper">
     <div id="container">
-        <a asp-controller="Home" asp-action="Logout">Logout</a>
         <div>
+            Welcome, @ViewBag.MyUser.UserName <a asp-controller="Home" asp-action="Logout">Logout</a>
+        </div>
+        <div class="puzzlesTab">
             <h1>My Puzzles</h1>
             <a asp-controller="Picross" asp-action="MakePuzzle" asp-route-xSize="15" asp-route-ySize="10">+new puzzle</a>
             <div>
                 @foreach(var puzzle in ViewBag.MyUser.CreatedPuzzles)
                 {
-                    <p>puzzle #@puzzle.PuzzleId</p>
+                    <div class="puzzleTabBox">
+                        <a asp-action="ShowPuzzle" asp-controller="Picross" asp-route-puzzleId="@puzzle.PuzzleId">Puzzle #@puzzle.PuzzleId</a>
+                        <p>by <i>@puzzle.Creator.UserName</i></p>
+                        <h6>@puzzle.xSize x @puzzle.ySize</h6>
+                        <a class="removeLink" href="@puzzle.PuzzleId/delete" onclick="return confirm('Are you sure?')">delete</a>
+                    </div>
                 }
             </div>
         </div>
         
-        <div>
+        <div class="puzzlesTab">
             <h1>Community puzzles</h1>
             <div>
                 @foreach(var puzzle in ViewBag.AllPuzzles)
                 {
-                    <a asp-action="ShowPuzzle" asp-controller="Picross" asp-route-puzzleId="@puzzle.PuzzleId">#@puzzle.PuzzleId dim:@puzzle.xSize x @puzzle.ySize</a>
-                    <br>
+                    <div class="puzzleTabBox">
+                        <a asp-action="ShowPuzzle" asp-controller="Picross" asp-route-puzzleId="@puzzle.PuzzleId">Puzzle #@puzzle.PuzzleId</a>
+                        <p>by <i>@puzzle.Creator.UserName</i></p>
+                        <h6>@puzzle.xSize x @puzzle.ySize</h6>
+                    </div>
                 }
             </div>
         </div>
