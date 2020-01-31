@@ -21,7 +21,7 @@
 .leftHint li{
     display: inline-flex;
     margin: 5px;
-    float: right;
+    float: left;
 }
 
 .topHint td{
