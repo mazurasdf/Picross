@@ -1,16 +1,15 @@
 @model Puzzle
 
-<link rel="stylesheet" href="~/css/picross.css" />
 <link rel="stylesheet" href="~/css/puzzle.css" />
-
-<div id="wrapper" oncontextmenu="return false">
+<h1>Puzzle #@Model.PuzzleId</h1>
+<div id="container" oncontextmenu="return false">
     <table id="puzzleGrid">
-         <tr>
+         <tr class="topHint">
             <td></td>
         @for(int col = 1; col <= @Model.xSize; ++col)
         {
             <td>
-                <ul id="r0c@(col)"></ul>
+                <ul class="hint" id="r0c@(col)"></ul>
             </td>
         }
         </tr>
@@ -21,8 +20,8 @@
                 {
                     @if(col == 0)
                     {
-                        <td id="r@(row)c0">
-                            <ul></ul>
+                        <td>
+                            <ul id="r@(row)c0" class="hint leftHint"></ul>
                         </td>
                     }
                     else
@@ -36,6 +35,7 @@
 </div>
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/confetti/confetti.js"></script>
 <script language="javascript" type="text/javascript">
      $(document).ready(function(){
          function fillHints(xSize, ySize, dataSet){
@@ -43,10 +43,13 @@
              for(let x = 0; x < xSize; ++x){
                 //count will count a horizontal grouping of filled cells
                 let count = 0;
+                //true if there are no boxes in a row/column
+                let empty = true;
                 for(let y = 0; y < ySize; ++y){
                     //if a cell is filled, add to count
                     if (dataSet[(xSize * y) + x] == '1'){
                          ++count;
+                         empty = false;
                          //if last element in a column, add grouping to list
                          if(y == ySize - 1){
                              var ul = document.getElementById("r0c" + (x+1));
@@ -65,16 +68,26 @@
 
                         count = 0;
                      }
+                     //if there are no filled cells in a row/column
+                     else if((y == ySize - 1) && empty){
+                        var ul = document.getElementById("r0c" + (x+1));
+                        var li = document.createElement("li");
+                        li.appendChild(document.createTextNode(0));
+                        ul.appendChild(li);
+                     }
                  }
              }
              //find hint numbers from the side
             for(let y = 0; y < ySize; ++y){
                 //count will count a horizontal grouping of filled cells
                 let count = 0;
+                //true if there are no boxes in a row/column
+                let empty = true;
                 for(let x = 0; x < xSize; ++x){
                     //if a cell is filled, add to count
                     if (dataSet[(xSize * y) + x] == '1'){
                         ++count;
+                        empty = false;
                         //if last element in a column, add grouping to list
                         if(x == xSize - 1){
                             var ul = document.getElementById("r" + (y) + "c0");
@@ -91,6 +104,13 @@
                         li.appendChild(document.createTextNode(count));
                         ul.appendChild(li);
                         count = 0;
+                    }
+                    //if there are no filled cells in a row/column
+                    else if((x == xSize - 1) && empty){
+                        var ul = document.getElementById("r" + (y) + "c0");
+                        var li = document.createElement("li");
+                        li.appendChild(document.createTextNode(0));
+                        ul.appendChild(li);
                     }
                 }
             }
@@ -128,7 +148,7 @@
                     }
                 }
                 else{
-                    $(this).css("background-color", "navy");
+                    $(this).css("background-color", "#212121");
                     gridLayout[cellX][cellY - 1] = 1;
                     if(isWin(trueGridLayout, gridLayout)){
                         console.log("you win");
@@ -150,6 +170,7 @@
                 for(let j = 0; j < answerArr[i].length; ++j)
                     if(answerArr[i][j] != playerArr[i][j])
                         return false;
+            confetti.start();
             return true;
         }
 

@@ -29,7 +29,8 @@ namespace Picross.Controllers
             ViewBag.MyUser = dbContext.Users
                 .Include (u => u.CreatedPuzzles)
                 .FirstOrDefault (u => u.UserId == userInDb.UserId);
-            ViewBag.AllPuzzles = dbContext.Puzzles.ToList();
+            ViewBag.AllPuzzles = dbContext.Puzzles
+                .Include (p => p.Creator);
             return View ();
         }
 
@@ -47,12 +48,11 @@ namespace Picross.Controllers
             return View ();
         }
 
-        [HttpPost("picross/make/set")]
-        public IActionResult SetDimensions(int xDim, int yDim)
+        [HttpPost ("picross/make/set")]
+        public IActionResult SetDimensions (int xDim, int yDim)
         {
-            return RedirectToAction("MakePuzzle", "Picross", new RouteValueDictionary{
-                {"xSize",xDim},
-                {"ySize",yDim}
+            return RedirectToAction ("MakePuzzle", "Picross", new RouteValueDictionary
+            { { "xSize", xDim }, { "ySize", yDim }
             });
         }
 
@@ -78,8 +78,25 @@ namespace Picross.Controllers
             }
         }
 
-        [HttpGet("picross/{puzzleId}")]
-        public IActionResult ShowPuzzle(int puzzleId)
+        [HttpGet ("picross/{puzzleId}/delete")]
+        public IActionResult DeletePuzzle (int puzzleId)
+        {
+            User userInDb = LoggedIn ();
+            if (userInDb == null)
+            {
+                return RedirectToAction ("Logout", "Home");
+            }
+            Puzzle removeMe = dbContext.Puzzles
+                .FirstOrDefault (p => p.PuzzleId == puzzleId);
+            if (userInDb.UserId == removeMe.UserId){
+                dbContext.Puzzles.Remove(removeMe);
+                dbContext.SaveChanges();
+            }
+            return RedirectToAction ("Dashboard");
+        }
+
+        [HttpGet ("picross/{puzzleId}")]
+        public IActionResult ShowPuzzle (int puzzleId)
         {
             User userInDb = LoggedIn ();
             if (userInDb == null)
@@ -87,8 +104,8 @@ namespace Picross.Controllers
                 return RedirectToAction ("Logout", "Home");
             }
             ViewBag.User = userInDb;
-            Puzzle currentPuzzle = dbContext.Puzzles.FirstOrDefault(p => p.PuzzleId == puzzleId);
-            return View("ShowPuzzle", currentPuzzle);
+            Puzzle currentPuzzle = dbContext.Puzzles.FirstOrDefault (p => p.PuzzleId == puzzleId);
+            return View ("ShowPuzzle", currentPuzzle);
         }
 
         private User LoggedIn ()

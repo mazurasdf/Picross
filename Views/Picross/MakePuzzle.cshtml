@@ -1,5 +1,4 @@
 @model Puzzle
-<link rel="stylesheet" href="~/css/picross.css" />
 <link rel="stylesheet" href="~/css/puzzle.css" />
 
 <div id="wrapper">
@@ -57,7 +56,7 @@
                 gridLayout[$(this).attr("x")][$(this).attr("y")] = 0;
             }
             else{
-                $(this).css("background-color", "red");
+                $(this).css("background-color", "#212121");
                 gridLayout[$(this).attr("x")][$(this).attr("y")] = 1;
             }
             //also set the form input to the data for the puzzle
