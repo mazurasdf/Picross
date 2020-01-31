@@ -28,6 +28,22 @@
     vertical-align: bottom;
 }
 
-#puzzleGrid{
+#puzzleGrid #makePuzzleGrid{
     table-layout: fixed;
+}
+
+#makePuzzleGrid tr:nth-of-type(5n) td{
+    border-bottom: 2px solid black;
+  }
+  
+#makePuzzleGrid td:nth-of-type(5n){
+border-right: 2px solid black;
+}
+
+#puzzleGrid tr:nth-of-type(5n + 1) td{
+    border-bottom: 2px solid black;
+  }
+  
+#puzzleGrid td:nth-of-type(5n + 1){
+border-right: 2px solid black;
 }

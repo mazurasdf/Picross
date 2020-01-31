@@ -104,11 +104,3 @@ th:hover::after {
   width: 100%;
   z-index: -1;
 }
-
-table tr:nth-of-type(5n + 1) td{
-  border-bottom: 2px solid black;
-}
-
-table td:nth-of-type(5n + 1){
-  border-right: 2px solid black;
-}
