@@ -1,6 +1,7 @@
 @model Puzzle
 
 <link rel="stylesheet" href="~/css/puzzle.css" />
+<a asp-action="Dashboard" asp-controller="Picross">home</a>
 <h1>Puzzle #@Model.PuzzleId</h1>
 <div id="container" oncontextmenu="return false">
     <table id="puzzleGrid">
@@ -26,7 +27,7 @@
                     }
                     else
                     {
-                        <td class="puzzleCell" x="@row" y="@col"></td>
+                        <td class="puzzleCell blankCell" x="@row" y="@col"></td>
                     }
                 }
             </tr>
@@ -140,15 +141,20 @@
             
             //left click
             if(ev.which == 1){
+                //if cell is already filled make it blank
                 if(gridLayout[cellX][cellY - 1] == 1){
-                    $(this).css("background-color", "white");
+                    $(this).removeClass("filledCell");
+                    $(this).addClass("blankCell");
                     gridLayout[cellX][cellY - 1] = 0;
                     if(isWin(trueGridLayout, gridLayout)){
                         console.log("you win");
                     }
                 }
+                //if cell is blank or grey, make it black
                 else{
-                    $(this).css("background-color", "#212121");
+                    $(this).removeClass("blankCell");
+                    $(this).removeClass("greyCell");
+                    $(this).addClass("filledCell");
                     gridLayout[cellX][cellY - 1] = 1;
                     if(isWin(trueGridLayout, gridLayout)){
                         console.log("you win");
@@ -157,8 +163,16 @@
             }
             //right or middle click
             else{
-                $(this).css("background-color", "lightgrey");
-                gridLayout[cellX][cellY - 1] = 0;
+                if($(this).hasClass("greyCell")){
+                    $(this).removeClass("greyCell");
+                    $(this).addClass("blankCell");
+                }
+                else{
+                    $(this).removeClass("blankCell");
+                    $(this).removeClass("filledCell");
+                    $(this).addClass("greyCell");
+                    gridLayout[cellX][cellY - 1] = 0;
+                }
                 if(isWin(trueGridLayout, gridLayout)){
                     console.log("you win");
                 }

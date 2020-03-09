@@ -6,8 +6,19 @@
     border: 1px solid black;
     padding: 0px;
     margin: 0px;
-    background-color: white;
     position: relative;
+}
+
+.filledCell{
+    background-color: #212121;
+}
+
+.greyCell{
+    background-color: lightgrey;
+}
+
+.blankCell{
+    background-color: white;
 }
 
 .hint{
@@ -37,13 +48,13 @@
   }
   
 #makePuzzleGrid td:nth-of-type(5n){
-border-right: 2px solid black;
+    border-right: 2px solid black;
 }
 
 #puzzleGrid tr:nth-of-type(5n + 1) td{
     border-bottom: 2px solid black;
-  }
+}
   
 #puzzleGrid td:nth-of-type(5n + 1){
-border-right: 2px solid black;
+    border-right: 2px solid black;
 }

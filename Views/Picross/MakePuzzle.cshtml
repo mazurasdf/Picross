@@ -2,18 +2,20 @@
 <link rel="stylesheet" href="~/css/puzzle.css" />
 
 <div id="wrapper">
+    <a asp-action="Dashboard" asp-controller="Picross">home</a>
+    <h1>New Puzzle</h1>
     <table id="makePuzzleGrid">
         @for(int row=0; row < @ViewBag.ySize; ++row)
         {
             <tr>
             @for(int col=0; col < ViewBag.xSize; ++col)
             {
-                <td id="r@(row)c@(col)" class="puzzleCell" x="@row" y="@col"></td>
+                <td id="r@(row)c@(col)" class="puzzleCell blankCell" x="@row" y="@col"></td>
             }
             </tr>
         }
     </table>
-
+    <br>
     <form asp-action="CreatePuzzle" asp-controller="Picross" method="post">
         <input id="puzzleData" type="hidden" asp-for="puzzleData">
         <input type="hidden" asp-for="xSize" value="@ViewBag.xSize">
@@ -52,11 +54,13 @@
         //on click, change the style and change the grid layout for submitting
         $(".puzzleCell").on('click', function(event){
             if(gridLayout[$(this).attr("x")][$(this).attr("y")] == 1){
-                $(this).css("background-color", "white");
+                $(this).removeClass("filledCell");
+                $(this).addClass("blankCell");
                 gridLayout[$(this).attr("x")][$(this).attr("y")] = 0;
             }
             else{
-                $(this).css("background-color", "#212121");
+                $(this).removeClass("blankCell");
+                $(this).addClass("filledCell");
                 gridLayout[$(this).attr("x")][$(this).attr("y")] = 1;
             }
             //also set the form input to the data for the puzzle
