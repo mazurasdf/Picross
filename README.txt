@@ -1,2 +1,0 @@
-This is a solo project developed in one week by Michael Mazur during project week at Coding Dojo Chicago.
-It is a website to allow users to create accounts and login to make, share, and solve Picross puzzles.
